@@ -149,8 +149,6 @@ def getLines(calculated_tile_size, max_x, max_y, tile_cords):
     return cx_lines
 
 
-
-
 if __name__ == '__main__':
 
     # create arg parser
