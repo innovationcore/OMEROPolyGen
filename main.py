@@ -1,4 +1,6 @@
 import argparse
+import json
+
 
 def getTileCords(args):
 
@@ -58,6 +60,47 @@ def getTileCords(args):
 
     return calculated_tile_size, max_x, max_y, tile_cords
 
+def getTileCordsFile(args):
+
+    with open(args.cord_input_path) as f:
+        data = json.load(f)
+
+    # square with four tiles
+    tile_cords = dict()
+    count = 0
+    for tile in data['tiles']:
+
+        tile_cord0 = dict()
+        tile_cord0['x0'] = tile['points']['x_s']
+        tile_cord0['x1'] = tile['points']['x_e']
+        tile_cord0['y0'] = tile['points']['y_s']
+        tile_cord0['y1'] = tile['points']['y_e']
+        tile_cord0['confidence'] = tile['confidence']
+        if tile['confidence'] >= .75:
+            tile_cord0['color'] = 'red'
+        elif (tile['confidence'] >= .5) and (tile['confidence'] < .75):
+            tile_cord0['color'] = 'yellow'
+        elif tile['confidence'] < .5:
+            tile_cord0['color'] = 'green'
+        else:
+            print('wtf')
+            print(tile)
+
+        tile_cords[count] = tile_cord0
+        count = count + 1
+
+    calculated_tile_size = tile_cords[0]['x1'] - tile_cords[0]['x0']
+
+    max_x = 0
+    max_y = 0
+
+    for tile_id, coord in tile_cords.items():
+        if coord['x1'] > max_x:
+            max_x = coord['x1']
+        if coord['y1'] > max_y:
+            max_y = coord['y1']
+
+    return calculated_tile_size, max_x, max_y, tile_cords
 
 def getLines(calculated_tile_size, max_x, max_y, tile_cords):
 
@@ -114,14 +157,21 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='OMERO Polyline Generator')
 
     # general args
-    parser.add_argument('--tile_input_path', type=str, default="tile_input.json", help='information on tile coords')
+    parser.add_argument('--cord_input_path', type=str, default="cords.json", help='information on tile coords')
     #parser.add_argument('--tile_size', type=int, default=768, help='size of tiles')
 
     args = parser.parse_args()
 
+    #in code
     calculated_tile_size, max_x, max_y, tile_cords = getTileCords(args)
+    print(tile_cords)
 
+    #in file
+    calculated_tile_size, max_x, max_y, tile_cords = getTileCordsFile(args)
+    print(tile_cords)
 
+    exit(0)
     cx_lines = getLines(calculated_tile_size, max_x, max_y, tile_cords)
 
-    print(cx_lines)
+    for cx_line in cx_lines:
+        print(cx_line)

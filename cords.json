@@ -1,0 +1,44 @@
+{
+    "tiles": [
+        {
+            "tile_id": 0,
+            "confidence": 0.75,
+            "points": {
+                "x_s": 0,
+                "x_e": 768,
+                "y_s": 0,
+                "y_e": 768
+            }
+        },
+        {
+            "tile_id": 1,
+            "confidence": 0.9,
+            "points": {
+                "x_s": 768,
+                "x_e": 1536,
+                "y_s": 0,
+                "y_e": 768
+            }
+        },
+        {
+            "tile_id": 2,
+            "confidence": 0.25,
+            "points": {
+                "x_s": 0,
+                "x_e": 768,
+                "y_s": 768,
+                "y_e": 1536
+            }
+        },
+        {
+            "tile_id": 3,
+            "confidence": 0.55,
+            "points": {
+                "x_s": 768,
+                "x_e": 1536,
+                "y_s": 768,
+                "y_e": 1536
+            }
+        }
+    ]
+}
